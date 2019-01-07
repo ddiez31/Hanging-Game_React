@@ -1,37 +1,38 @@
 import React, { Component } from 'react'
+import { Button } from 'reactstrap';
 import PropTypes from 'prop-types'
 import './Keyboard.css'
 
 class Keyboard extends Component {
-  getWrongAttr = letter => {
-    let disabled = ''
+  getDisabledStatus = letter => {
+    let disabled = false
     if (this.props.usedLetters.indexOf(letter) > -1) {
-      disabled = 'disabled'
+      disabled = true
     }
-
     return disabled
   }
-  getRightClass = letter => {
-    let newClass = 'buttonKeyboard'
 
+  getColorStyle = letter => {
+    let color = 'secondary'
     if (this.props.goodLetters.indexOf(letter) > -1) {
-      newClass += ' right'
+      color = 'success'
+    } else if (!this.props.goodLetters.indexOf(letter) > -1 && this.props.usedLetters.indexOf(letter) > -1) {
+      color = 'danger'
     }
-    return newClass
+    return color
   }
 
   render() {
     return (
       <div className="keyboard">
         {this.props.letters.map((letter, index) => (
-          <button
-            disabled={this.getWrongAttr(letter)}
+          <Button
+            color={this.getColorStyle(letter)}
+            disabled={this.getDisabledStatus(letter)}
             key={index}
-            className={this.getRightClass(letter)}
-            onClick={() => this.props.onClick(letter)}
-          >
-            {letter}
-          </button>
+            onClick={() => this.props.onClick(letter)}>
+              {letter}
+          </Button>
         ))}
       </div>
     )
@@ -39,6 +40,6 @@ class Keyboard extends Component {
 }
 Keyboard.propTypes = {
   letters: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired
 }
 export default Keyboard

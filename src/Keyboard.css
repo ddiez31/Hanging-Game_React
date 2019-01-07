@@ -1,0 +1,21 @@
+.keyboard {
+    height: 40vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.keyboard .btn {
+    width: 4rem;
+    height: 4rem;
+    margin: 0.7rem;
+    border-radius: 2rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: white;
+}
+
+.keyboard .btn.disabled {
+    cursor: not-allowed;
+}

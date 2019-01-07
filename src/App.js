@@ -13,14 +13,7 @@ class App extends Component {
     word: this.getRandomWord(),
     usedLetters: [],
     goodLetters: [],
-    hiddenLettersOfWord: [],
-  }
-
-
-  computeDisplay(word, usedLetters) {
-    return word.replace(/\w/g,
-      (letter) => (usedLetters.has(letter) ? letter : '_')
-    )
+    hiddenLettersOfWord: []
   }
 
   componentWillMount() {
@@ -56,7 +49,8 @@ class App extends Component {
     usedLetters.push(letter)
     if (attempt === -1) {
       nbError++
-    } else {
+    }
+    while (attempt !== -1) {
       goodLetters.push(letter)
       attempt = word.indexOf(letter, attempt + 1)
     }
@@ -65,22 +59,34 @@ class App extends Component {
   }
 
   render() {
+    const lose = this.state.nbError >= maxTry
+    const win = this.state.goodLetters.length === this.state.word.length && !lose
+    const remaingTrys = maxTry - this.state.nbError
     return (
       <div className="App">
         <header className="App-header">
           <h1>Jeu du Pendu</h1>
         </header>
-        <div className="word">
-          {this.state.hiddenLettersOfWord.map((letter, index) => 
-            <span key={index}>{letter}</span>
-          )}
+        <div className="container">
+          <div className="remainingTrys">
+            Nb d'essai restant: {remaingTrys}
+          </div>
+          <div className="endGame">
+            {win && <span className="win">You Win !</span>}
+            {lose && <span className="lose">You Lose !</span>}
+          </div>
+          <div className="word">
+            {this.state.hiddenLettersOfWord.map((letter, index) => 
+              <span key={index}>{letter}</span>
+            )}
+          </div>
+          <Keyboard
+            letters={this.state.letters}
+            usedLetters={this.state.usedLetters}
+            goodLetters={this.state.goodLetters}
+            onClick={this.handleLetterClick}
+          />          
         </div>
-        <Keyboard
-          letters={this.state.letters}
-          usedLetters={this.state.usedLetters}
-          goodLetters={this.state.goodLetters}
-          onClick={this.handleLetterClick}
-        />          
       </div>
     );
   }
